@@ -10,13 +10,15 @@ const exec = require('child_process').execSync
  * }
  */
 module.exports  = function (execCommand){
-  let commandResult, result
+  let result
 
   try {
-    commandResult = exec(execCommand)
+    const commandResult = exec(execCommand)
+    const commandResultStr = commandResult.toString()
+    const cleanResultStr = commandResultStr.replace(/\n$/g, '');
     result = {
       status: 0,
-      message: commandResult.toString(),
+      message: cleanResultStr,
     }
   } catch (e) {
     result = {

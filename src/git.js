@@ -7,8 +7,8 @@ exports.branchExists = function (branchName) {
   return branchOutput.status === 0 && branchOutput.message !== ''
 }
 
-exports.tagExists = function (branchName) {
-  const tagOutput = exec(`git branch -a | egrep "remotes/origin/${branchName}"`)
+exports.tagExists = function (tagName) {
+  const tagOutput = exec(`git tag -l | egrep "${tagName}"`)
   return tagOutput.status === 0 && tagOutput.message !== ''
 }
 
