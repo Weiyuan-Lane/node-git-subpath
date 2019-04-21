@@ -19,11 +19,13 @@ git-subpath -p packages/Helper -m Helper -t v0.0.1
 - `m` flag represents the module name that will be used as part of the tag namespace
 - `t` flag represents the version number or id variant that will be used as part of the tag namespace
 
-Upon invoking the above command successfully, the log will reveal the installation instructions at the end
+Upon invoking the above command successfully, the log should reveal the installation instructions at the end
 ```
 =========================
 
-Output install: "npm install --save git+ssh://git@github.com:user/repo.git#v0.0.1-Helper"
+Example install paths (switch out protocol as long as the remote + tag works for you) -
+ HTTPS install: "npm install --save git+https://git@github.com:user/repo.git#v0.0.1-Helper"
+ SSH   install: "npm install --save git+ssh://git@github.com:user/repo.git#v0.0.1-Helper"
 ```
 
 ## Help
