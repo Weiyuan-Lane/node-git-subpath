@@ -79,11 +79,20 @@ if (gitAddOriginOutput.status !== 0) {
 
 // Step 7. Push version to github
 logger.log('7. Push module and tagged version to github')
-exec(`git checkout -b ${TAG_STAGING_BRANCH} && git add --all && git commit -m ${targetTag} && git push -f --set-upstream origin ${TAG_STAGING_BRANCH} && git tag ${targetFullTag} && git push --tag`)
+const gitPushModuleOutput = exec(`git checkout -b ${TAG_STAGING_BRANCH} && git add --all && git commit -m ${targetTag} && git push -f --set-upstream origin ${TAG_STAGING_BRANCH} && git tag ${targetFullTag} && git push --tag`)
+if (gitPushModuleOutput.status !== 0) {
+  logger.error(`push module via git failed for the following reason(s): \n${gitPushModuleOutput.message}`)
+}
 
 // Step 8. Cleanup
 logger.log('8. Remove created git repository and return to original path')
-exec('rm -rf .git')
-exec(`cd ${currentPath}`)
+const rmGit = exec('rm -rf .git')
+if (rmGit.status !== 0) {
+  logger.error(`rm hidden git dir failed for the following reason(s): \n${rmGit.message}`)
+}
+const cdPath = exec(`cd ${currentPath}`)
+if (cdPath.status !== 0) {
+  logger.error(`push module via git failed for the following reason(s): \n${cdPath.message}`)
+}
 
 logger.log(`Output install: "npm install --save git+ssh://${gitRemoteUrl}#${targetFullTag}"`)
