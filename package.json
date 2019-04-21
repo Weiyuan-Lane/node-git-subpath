@@ -1,0 +1,13 @@
+{
+  "name": "git-subpath",
+  "version": "0.0.1",
+  "description": "Publish subpath of a repository to a prescribed version. Useful for installing node modules from a monorepo on github.",
+  "bin": {
+    "git-subpath": "./bin/index.js"
+  },
+  "author": "Weiyuan Liu (weiyuan.lane@gmail.com)",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "2.20.0"
+  }
+}
