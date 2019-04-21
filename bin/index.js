@@ -19,7 +19,7 @@ if (!cli.path || !cli.module || !cli.tag ) {
 const targetPath = cli.path
 const targetModule = cli.module
 const targetTag = cli.tag
-const targetFullTag = `${targetModule}-${targetTag}`
+const targetFullTag = `${targetTag}-${targetModule}`
 
 // Step 1: Check if git is supported by the machine's cli 
 logger.log('1. Checking for git binary')
@@ -50,12 +50,6 @@ if (git.tagExists(targetFullTag)) {
 
 // Step 5: Get local git config
 logger.log('5. Getting local git config')
-const currenDirOutput = exec('pwd')
-if (currenDirOutput.status !== 0) {
-  logger.error(`pwd failed for the following reason(s): \n${currenDirOutput.message}`)
-}
-const currentPath = currenDirOutput.message
-
 const gitGetRemoteOutput = exec('git remote get-url origin')
 if (gitGetRemoteOutput.status !== 0) {
   logger.error(`git remote failed for the following reason(s): \n${gitGetRemoteOutput.message}`)
@@ -68,31 +62,27 @@ const targetPathOutput = exec(`cd ${targetPath}`)
 if (targetPathOutput.status !== 0) {
   logger.error(`cd failed for the following reason(s): \n${targetPathOutput.message}`)
 }
-const gitInitOutput = exec('git init')
+const gitInitOutput = exec(`cd ${targetPath} && git init`)
 if (gitInitOutput.status !== 0) {
   logger.error(`git init failed for the following reason(s): \n${gitInitOutput.message}`)
 }
-const gitAddOriginOutput = exec(`git remote add origin ${gitRemoteUrl}`)
+const gitAddOriginOutput = exec(`cd ${targetPath} && git remote add origin ${gitRemoteUrl}`)
 if (gitAddOriginOutput.status !== 0) {
   logger.error(`git remote failed for the following reason(s): \n${gitAddOriginOutput.message}`)
 }
 
 // Step 7. Push version to github
 logger.log('7. Push module and tagged version to github')
-const gitPushModuleOutput = exec(`git checkout -b ${TAG_STAGING_BRANCH} && git add --all && git commit -m ${targetTag} && git push -f --set-upstream origin ${TAG_STAGING_BRANCH} && git tag ${targetFullTag} && git push --tag`)
+const gitPushModuleOutput = exec(`cd ${targetPath} && git checkout -b ${TAG_STAGING_BRANCH} && git add --all && git commit -m ${targetTag} && git push -f --set-upstream origin ${TAG_STAGING_BRANCH} && git tag ${targetFullTag} && git push --tag`)
 if (gitPushModuleOutput.status !== 0) {
   logger.error(`push module via git failed for the following reason(s): \n${gitPushModuleOutput.message}`)
 }
 
 // Step 8. Cleanup
 logger.log('8. Remove created git repository and return to original path')
-const rmGit = exec('rm -rf .git')
+const rmGit = exec(`cd ${targetPath} && rm -rf .git`)
 if (rmGit.status !== 0) {
   logger.error(`rm hidden git dir failed for the following reason(s): \n${rmGit.message}`)
-}
-const cdPath = exec(`cd ${currentPath}`)
-if (cdPath.status !== 0) {
-  logger.error(`push module via git failed for the following reason(s): \n${cdPath.message}`)
 }
 
 logger.log(`Output install: "npm install --save git+ssh://${gitRemoteUrl}#${targetFullTag}"`)
