@@ -85,4 +85,6 @@ if (rmGit.status !== 0) {
   logger.error(`rm hidden git dir failed for the following reason(s): \n${rmGit.message}`)
 }
 
-logger.log(`Output install: "npm install --save git+ssh://${gitRemoteUrl}#${targetFullTag}"`)
+logger.log('Example install paths (switch out protocol as long as the remote + tag works for you) - \n',
+           `HTTPS install: "npm install --save git+https://${gitRemoteUrl}#${targetFullTag}"\n`,
+           `SSH   install: "npm install --save git+ssh://${gitRemoteUrl}#${targetFullTag}"`)
