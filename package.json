@@ -1,6 +1,6 @@
 {
   "name": "git-subpath",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Publish subpath of a repository to a prescribed version. Useful for installing node modules from a monorepo on github.",
   "bin": {
     "git-subpath": "./bin/index.js"
